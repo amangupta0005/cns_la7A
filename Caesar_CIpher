@@ -1,0 +1,48 @@
+import java.util.Scanner;
+
+public class CaesarCipher {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter plaintext: ");
+        String text = sc.nextLine();
+
+        System.out.print("Enter key: ");
+        int key = sc.nextInt();
+
+        String encrypted = "";
+
+        // Encryption
+        for (char ch : text.toCharArray()) {
+
+            if (Character.isLetter(ch)) {
+                char base = Character.isUpperCase(ch) ? 'A' : 'a';
+
+                // Shift character forward
+                ch = (char)((ch - base + key) % 26 + base);
+            }
+
+            encrypted += ch;
+        }
+
+        System.out.println("Encrypted Text: " + encrypted);
+
+        String decrypted = "";
+
+        // Decryption
+        for (char ch : encrypted.toCharArray()) {
+
+            if (Character.isLetter(ch)) {
+                char base = Character.isUpperCase(ch) ? 'A' : 'a';
+
+                // Shift character backward
+              zch = (char)((ch - base - key + 26) % 26 + base);
+            }
+
+            decrypted += ch;
+        }
+
+        System.out.println("Decrypted Text: " + decrypted);
+    }
+}
