@@ -1,0 +1,50 @@
+import java.util.Scanner;
+
+public class RailFenceCipher {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter plaintext: ");
+        String text = sc.nextLine();
+
+        System.out.print("Enter key: ");
+        int key = sc.nextInt();
+
+        // Create rails
+        String[] rails = new String[key];
+
+        for (int i = 0; i < key; i++) {
+            rails[i] = "";
+        }
+
+        int row = 0;
+        int direction = 1;
+
+        // Write text in zig-zag pattern
+        for (char ch : text.toCharArray()) {
+
+            rails[row] += ch;
+
+            // Change direction at top
+            if (row == 0)
+                direction = 1;
+
+            // Change direction at bottom
+            else if (row == key - 1)
+                direction = -1;
+
+            row += direction;
+        }
+
+        // Read row by row
+        String encrypted = "";
+
+        for (String rail : rails) {
+            encrypted += rail;
+        }
+
+        System.out.println("Encrypted Text: " + encrypted);
+    }
+}
