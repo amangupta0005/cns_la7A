@@ -1,0 +1,138 @@
+import java.util.Scanner;
+
+public class PlayfairCipher {
+
+    static char[][] matrix = new char[5][5];
+
+    // Create 5 x 5 matrix
+    static void createMatrix(String key) {
+
+        key = key.toUpperCase().replace("J", "I");
+
+        String letters = "";
+
+        // Add key letters without repetition
+        for (char ch : key.toCharArray()) {
+            if (ch >= 'A' && ch <= 'Z' && letters.indexOf(ch) == -1) {
+                letters += ch;
+            }
+        }
+
+        // Add remaining alphabet letters
+        for (char ch = 'A'; ch <= 'Z'; ch++) {
+            if (ch == 'J')
+                continue;
+
+            if (letters.indexOf(ch) == -1) {
+                letters += ch;
+            }
+        }
+
+        // Fill matrix
+        int k = 0;
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                matrix[i][j] = letters.charAt(k++);
+            }
+        }
+    }
+
+    // Find position of a character
+    static int[] position(char ch) {
+
+        if (ch == 'J')
+            ch = 'I';
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+
+                if (matrix[i][j] == ch)
+                    return new int[]{i, j};
+            }
+        }
+
+        return null;
+    }
+
+    // Encrypt plaintext
+    static String encrypt(String text) {
+
+        text = text.toUpperCase()
+                   .replace("J", "I")
+                   .replaceAll("[^A-Z]", "");
+
+        String prepared = "";
+
+        // Prepare pairs
+        for (int i = 0; i < text.length(); i++) {
+
+            char first = text.charAt(i);
+
+            if (i + 1 < text.length()) {
+
+                char second = text.charAt(i + 1);
+
+                if (first == second) {
+                    prepared += first + "X";
+                } else {
+                    prepared += first + "" + second;
+                    i++;
+                }
+
+            } else {
+                prepared += first + "X";
+            }
+        }
+
+        String result = "";
+
+        // Encrypt each pair
+        for (int i = 0; i < prepared.length(); i += 2) {
+
+            char a = prepared.charAt(i);
+            char b = prepared.charAt(i + 1);
+
+            int[] p1 = position(a);
+            int[] p2 = position(b);
+
+            // Same row
+            if (p1[0] == p2[0]) {
+
+                result += matrix[p1[0]][(p1[1] + 1) % 5];
+                result += matrix[p2[0]][(p2[1] + 1) % 5];
+
+            }
+            // Same column
+            else if (p1[1] == p2[1]) {
+
+                result += matrix[(p1[0] + 1) % 5][p1[1]];
+                result += matrix[(p2[0] + 1) % 5][p2[1]];
+
+            }
+            // Rectangle rule
+            else {
+
+                result += matrix[p1[0]][p2[1]];
+                result += matrix[p2[0]][p1[1]];
+            }
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter key: ");
+        String key = sc.nextLine();
+
+        System.out.print("Enter plaintext: ");
+        String text = sc.nextLine();
+
+        createMatrix(key);
+
+        System.out.println("Encrypted Text: " + encrypt(text));
+    }
+}
