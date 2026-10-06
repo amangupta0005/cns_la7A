@@ -1,0 +1,41 @@
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class RSA {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        // Two prime numbers
+        BigInteger p = new BigInteger("61");
+        BigInteger q = new BigInteger("53");
+
+        // n = p * q
+        BigInteger n = p.multiply(q);
+
+        // phi = (p-1)(q-1)
+        BigInteger phi =
+                p.subtract(BigInteger.ONE)
+                 .multiply(q.subtract(BigInteger.ONE));
+
+        // Public key
+        BigInteger e = new BigInteger("17");
+
+        // Private key
+        BigInteger d = e.modInverse(phi);
+
+        System.out.print("Enter plaintext (number < 3233): ");
+        BigInteger message = sc.nextBigInteger();
+
+        // Encryption: c = m^e mod n
+        BigInteger encrypted = message.modPow(e, n);
+
+        System.out.println("Encrypted: " + encrypted);
+
+        // Decryption: m = c^d mod n
+        BigInteger decrypted = encrypted.modPow(d, n);
+
+        System.out.println("Decrypted: " + decrypted);
+    }
+}
