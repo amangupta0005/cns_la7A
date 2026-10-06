@@ -1,0 +1,44 @@
+import java.util.Scanner;
+
+public class DiffieHellman {
+
+    // Calculates (base^power) % mod
+    static int power(int base, int power, int mod) {
+        int result = 1;
+
+        for (int i = 0; i < power; i++) {
+            result = (result * base) % mod;
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        // Public values
+        int p = 23;
+        int g = 5;
+
+        System.out.print("Enter private key of A: ");
+        int a = sc.nextInt();
+
+        System.out.print("Enter private key of B: ");
+        int b = sc.nextInt();
+
+        // Calculate public keys
+        int A = power(g, a, p);
+        int B = power(g, b, p);
+
+        // Calculate shared secret
+        int secretA = power(B, a, p);
+        int secretB = power(A, b, p);
+
+        System.out.println("Public key of A: " + A);
+        System.out.println("Public key of B: " + B);
+
+        System.out.println("Shared Secret Key of A: " + secretA);
+        System.out.println("Shared Secret Key of B: " + secretB);
+    }
+}
