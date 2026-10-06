@@ -1,0 +1,49 @@
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.util.Base64;
+import java.util.Scanner;
+
+public class DESDemo {
+
+    public static void main(String[] args) {
+
+        try {
+
+            Scanner sc = new Scanner(System.in);
+
+            System.out.print("Enter text to encrypt: ");
+            String text = sc.nextLine();
+
+            // Generate DES key
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("DES");
+            SecretKey key = keyGenerator.generateKey();
+
+            // Create DES cipher
+            Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+
+            // Encryption
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+
+            byte[] encrypted = cipher.doFinal(text.getBytes());
+
+            String encryptedText =
+                    Base64.getEncoder().encodeToString(encrypted);
+
+            // Decryption
+            cipher.init(Cipher.DECRYPT_MODE, key);
+
+            byte[] decrypted = cipher.doFinal(encrypted);
+
+            String decryptedText = new String(decrypted);
+
+            System.out.println("\n----- DES Encryption Demonstration -----");
+            System.out.println("Original Text : " + text);
+            System.out.println("Encrypted Text : " + encryptedText);
+            System.out.println("Decrypted Text : " + decryptedText);
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+    }
+}
